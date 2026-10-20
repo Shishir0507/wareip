@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warehouse Inventory - Purchase Requests</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Top Navigation Header -->
+    <header class="app-header">
+        <div class="header-container">
+            <div class="brand">
+                <span class="brand-icon">📦</span>
+                <div>
+                    <h1>Warehouse Inventory</h1>
+                    <p class="subtitle">Multi-Branch System</p>
+                </div>
+            </div>
+
+            <!-- Page Navigation -->
+            <nav class="header-nav">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="transfers.html">Transfers</a>
+                <a href="purchases.html" class="active">Purchases</a>
+                <a href="management.html" class="admin-only hidden">Management</a>
+            </nav>
+
+            <!-- User Info Bar -->
+            <div id="user-info-bar" class="user-info">
+                <span class="user-greeting">Welcome, <strong id="user-display-name">User</strong></span>
+                <span id="user-role-badge" class="badge badge-role">STAFF</span>
+                <span id="user-branch-indicator" class="branch-tag">Branch: -</span>
+                <button id="logout-btn" class="btn btn-secondary btn-sm" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <div id="purchases-page" class="main-wrapper">
+        <!-- Toast / Alert Notification Container -->
+        <div id="alert-box" class="alert hidden" role="alert"></div>
+
+        <div class="card">
+            <div class="section-toolbar">
+                <div>
+                    <h2>Automated Purchase &amp; Restock Requests</h2>
+                    <p class="subtitle">Purchase requests are automatically triggered by backend service logic whenever a branch's inventory drops below the product minimum threshold.</p>
+                </div>
+                <div class="toolbar-controls">
+                    <label for="purchase-branch-filter">Filter by Branch:</label>
+                    <select id="purchase-branch-filter" onchange="loadPurchases()">
+                        <option value="">All Branches</option>
+                    </select>
+                    <button class="btn btn-secondary btn-sm" onclick="loadPurchases()">Refresh</button>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Branch</th>
+                            <th>Product</th>
+                            <th>Requested Quantity</th>
+                            <th>Status</th>
+                            <th>Created Date</th>
+                            <th class="admin-only hidden">Admin Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="purchase-table-body">
+                        <tr><td colspan="7" class="text-center">Loading purchase requests...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

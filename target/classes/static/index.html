@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warehouse Inventory Management - Authentication</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Top Header -->
+    <header class="app-header">
+        <div class="header-container">
+            <div class="brand">
+                <span class="brand-icon">📦</span>
+                <div>
+                    <h1>Warehouse Inventory System</h1>
+                    <p class="subtitle">Multi-Branch Stock &amp; Transfer Management</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-wrapper">
+        <!-- Toast / Alert Notification Container -->
+        <div id="alert-box" class="alert hidden" role="alert"></div>
+
+        <!-- Authentication View -->
+        <section id="auth-section" class="auth-grid">
+            <!-- Login Box -->
+            <div class="card auth-card">
+                <h2>Account Login</h2>
+                <p class="card-desc">Sign in with your registered email and password.</p>
+                <form id="login-form" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="login-email">Email Address</label>
+                        <input type="email" id="login-email" required placeholder="e.g. admin@warehouse.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" required placeholder="Enter your password">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                </form>
+                <div class="demo-credentials">
+                    <p><strong>Initial Demo Credentials:</strong></p>
+                    <p>Admin: <code>admin@warehouse.com</code> / <code>Admin@123</code></p>
+                </div>
+            </div>
+
+            <!-- Staff Registration Box -->
+            <div class="card auth-card">
+                <h2>Staff Registration</h2>
+                <p class="card-desc">Create a new Staff account. Branch will be assigned by Administrator.</p>
+                <form id="register-form" onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label for="register-name">Full Name</label>
+                        <input type="text" id="register-name" required placeholder="e.g. John Doe">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-email">Email Address</label>
+                        <input type="email" id="register-email" required placeholder="e.g. staff@warehouse.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password">Password</label>
+                        <input type="password" id="register-password" required minlength="6" placeholder="At least 6 characters">
+                    </div>
+                    <button type="submit" class="btn btn-success btn-block">Register Staff Account</button>
+                </form>
+                <div class="help-text">
+                    <small>Note: Public registration always assigns the STAFF role. Newly registered staff are initially unassigned until approved by an Admin.</small>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

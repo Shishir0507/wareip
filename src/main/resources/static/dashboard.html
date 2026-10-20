@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warehouse Inventory - Dashboard &amp; Stock Overview</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Top Navigation Header -->
+    <header class="app-header">
+        <div class="header-container">
+            <div class="brand">
+                <span class="brand-icon">📦</span>
+                <div>
+                    <h1>Warehouse Inventory</h1>
+                    <p class="subtitle">Multi-Branch System</p>
+                </div>
+            </div>
+
+            <!-- Page Navigation -->
+            <nav class="header-nav">
+                <a href="dashboard.html" class="active">Dashboard</a>
+                <a href="transfers.html">Transfers</a>
+                <a href="purchases.html">Purchases</a>
+                <a href="management.html" class="admin-only hidden">Management</a>
+            </nav>
+
+            <!-- User Info Bar -->
+            <div id="user-info-bar" class="user-info">
+                <span class="user-greeting">Welcome, <strong id="user-display-name">User</strong></span>
+                <span id="user-role-badge" class="badge badge-role">STAFF</span>
+                <span id="user-branch-indicator" class="branch-tag">Branch: -</span>
+                <button id="logout-btn" class="btn btn-secondary btn-sm" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <div id="dashboard-page" class="main-wrapper">
+        <!-- Toast / Alert Notification Container -->
+        <div id="alert-box" class="alert hidden" role="alert"></div>
+
+        <!-- 1. Real-Time Dashboard Analytics KPIs -->
+        <section class="section-toolbar" style="margin-bottom: 0.75rem;">
+            <h2>System Overview &amp; Analytics</h2>
+            <button class="btn btn-secondary btn-sm" onclick="loadDashboardAnalytics()">Refresh Metrics</button>
+        </section>
+
+        <section class="analytics-grid">
+            <div class="metric-card">
+                <span class="metric-icon">🏢</span>
+                <div class="metric-data">
+                    <span class="metric-value" id="stat-branches">-</span>
+                    <span class="metric-label">Total Branches</span>
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <span class="metric-icon">🏷️</span>
+                <div class="metric-data">
+                    <span class="metric-value" id="stat-products">-</span>
+                    <span class="metric-label">Catalog Products</span>
+                </div>
+            </div>
+
+            <div class="metric-card warning">
+                <span class="metric-icon">⚠️</span>
+                <div class="metric-data">
+                    <span class="metric-value" id="stat-low-stock">-</span>
+                    <span class="metric-label">Low-Stock Items</span>
+                </div>
+            </div>
+
+            <div class="metric-card pending">
+                <span class="metric-icon">🔄</span>
+                <div class="metric-data">
+                    <span class="metric-value" id="stat-pending-transfers">-</span>
+                    <span class="metric-label">Pending Transfers</span>
+                </div>
+            </div>
+
+            <div class="metric-card pending">
+                <span class="metric-icon">📋</span>
+                <div class="metric-data">
+                    <span class="metric-value" id="stat-pending-purchases">-</span>
+                    <span class="metric-label">Pending Purchases</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. Multi-Branch Stock Overview Table -->
+        <section class="card">
+            <div class="section-toolbar">
+                <div>
+                    <h2>Multi-Branch Stock Overview</h2>
+                    <p class="subtitle">Real-time inventory levels by warehouse branch and product catalog.</p>
+                </div>
+                <div class="toolbar-controls">
+                    <label for="stock-branch-filter">Select Branch:</label>
+                    <select id="stock-branch-filter" onchange="loadStocks()">
+                        <option value="">All Branches</option>
+                    </select>
+                    <button class="btn btn-secondary btn-sm" onclick="loadStocks()">Refresh Stock</button>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Branch Name</th>
+                            <th>Product Name</th>
+                            <th>SKU</th>
+                            <th>Available Quantity</th>
+                            <th>Minimum Threshold</th>
+                            <th>Stock Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="stock-table-body">
+                        <tr><td colspan="6" class="text-center">Loading stock data...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 3. Stock Initialization (Admin Only) -->
+        <section class="card admin-only hidden">
+            <h2>Initialize Branch Stock</h2>
+            <p class="card-desc">Assign initial stock quantities for a product at a specific branch. Each branch/product combination can only be initialized once.</p>
+            <form id="init-stock-form" onsubmit="handleInitStock(event)">
+                <div class="form-row">
+                    <div class="form-group col">
+                        <label for="init-branch-select">Branch</label>
+                        <select id="init-branch-select" required>
+                            <option value="">Select Branch</option>
+                        </select>
+                    </div>
+                    <div class="form-group col">
+                        <label for="init-product-select">Product</label>
+                        <select id="init-product-select" required>
+                            <option value="">Select Product</option>
+                        </select>
+                    </div>
+                    <div class="form-group col">
+                        <label for="init-quantity">Initial Quantity</label>
+                        <input type="number" id="init-quantity" min="0" required placeholder="e.g. 50">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Initialize Stock</button>
+            </form>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

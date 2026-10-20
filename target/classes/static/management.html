@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warehouse Inventory - Administrative Management</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Top Navigation Header -->
+    <header class="app-header">
+        <div class="header-container">
+            <div class="brand">
+                <span class="brand-icon">📦</span>
+                <div>
+                    <h1>Warehouse Inventory</h1>
+                    <p class="subtitle">Multi-Branch System</p>
+                </div>
+            </div>
+
+            <!-- Page Navigation -->
+            <nav class="header-nav">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="transfers.html">Transfers</a>
+                <a href="purchases.html">Purchases</a>
+                <a href="management.html" class="active admin-only">Management</a>
+            </nav>
+
+            <!-- User Info Bar -->
+            <div id="user-info-bar" class="user-info">
+                <span class="user-greeting">Welcome, <strong id="user-display-name">User</strong></span>
+                <span id="user-role-badge" class="badge badge-role">ADMIN</span>
+                <span id="user-branch-indicator" class="branch-tag">Branch: All (Admin)</span>
+                <button id="logout-btn" class="btn btn-secondary btn-sm" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <div id="management-page" class="main-wrapper">
+        <!-- Toast / Alert Notification Container -->
+        <div id="alert-box" class="alert hidden" role="alert"></div>
+
+        <div class="section-toolbar">
+            <div>
+                <h2>Administrative Management</h2>
+                <p class="subtitle">Manage physical warehouse branches, product catalog specifications, and staff branch assignments.</p>
+            </div>
+        </div>
+
+        <!-- Sub-navigation between management modules -->
+        <div class="sub-nav">
+            <button class="sub-nav-btn active" onclick="switchMgmtTab('mgmt-branches')">🏢 Branches</button>
+            <button class="sub-nav-btn" onclick="switchMgmtTab('mgmt-products')">🏷️ Products</button>
+            <button class="sub-nav-btn" onclick="switchMgmtTab('mgmt-staff')">👥 Staff Assignment</button>
+        </div>
+
+        <!-- MODULE 1: MANAGE BRANCHES -->
+        <div id="mgmt-branches" class="mgmt-section">
+            <div class="card">
+                <h3 id="branch-form-title">Add New Branch</h3>
+                <form id="branch-form" onsubmit="handleSaveBranch(event)">
+                    <input type="hidden" id="branch-id">
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label for="branch-name">Branch Name</label>
+                            <input type="text" id="branch-name" required placeholder="e.g. West Coast Distribution Center">
+                        </div>
+                        <div class="form-group col">
+                            <label for="branch-location">Location / Address</label>
+                            <input type="text" id="branch-location" required placeholder="e.g. Plot 14, Industrial Area">
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" id="btn-save-branch" class="btn btn-primary">Save Branch</button>
+                        <button type="button" id="btn-cancel-branch" class="btn btn-secondary hidden" onclick="cancelBranchEdit()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Branch Name</th>
+                            <th>Location</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="branch-table-body">
+                        <tr><td colspan="4" class="text-center">Loading branches...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- MODULE 2: MANAGE PRODUCTS -->
+        <div id="mgmt-products" class="mgmt-section hidden">
+            <div class="card">
+                <h3 id="product-form-title">Add New Product</h3>
+                <form id="product-form" onsubmit="handleSaveProduct(event)">
+                    <input type="hidden" id="product-id">
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label for="product-name">Product Name</label>
+                            <input type="text" id="product-name" required placeholder="e.g. Wireless Mouse">
+                        </div>
+                        <div class="form-group col">
+                            <label for="product-sku">SKU (Unique Code)</label>
+                            <input type="text" id="product-sku" required placeholder="e.g. SKU-MOU-001">
+                        </div>
+                        <div class="form-group col">
+                            <label for="product-threshold">Min Stock Threshold</label>
+                            <input type="number" id="product-threshold" min="0" required placeholder="e.g. 10">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-desc">Description (Optional)</label>
+                        <input type="text" id="product-desc" placeholder="e.g. 2.4GHz optical USB mouse">
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" id="btn-save-product" class="btn btn-primary">Save Product</button>
+                        <button type="button" id="btn-cancel-product" class="btn btn-secondary hidden" onclick="cancelProductEdit()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>SKU</th>
+                            <th>Min Threshold</th>
+                            <th>Description</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="product-table-body">
+                        <tr><td colspan="6" class="text-center">Loading products...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- MODULE 3: STAFF ASSIGNMENT -->
+        <div id="mgmt-staff" class="mgmt-section hidden">
+            <div class="section-toolbar">
+                <div>
+                    <h2>Registered Staff Accounts</h2>
+                    <p class="subtitle">Assign physical warehouse branches to staff accounts so they can create transfer requests.</p>
+                </div>
+                <button class="btn btn-secondary btn-sm" onclick="loadStaffList()">Refresh List</button>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Staff ID</th>
+                            <th>Full Name</th>
+                            <th>Email</th>
+                            <th>Currently Assigned Branch</th>
+                            <th>Assign New Branch</th>
+                        </tr>
+                    </thead>
+                    <tbody id="staff-table-body">
+                        <tr><td colspan="5" class="text-center">Loading staff list...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

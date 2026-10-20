@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warehouse Inventory - Stock Transfer Requests</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Top Navigation Header -->
+    <header class="app-header">
+        <div class="header-container">
+            <div class="brand">
+                <span class="brand-icon">📦</span>
+                <div>
+                    <h1>Warehouse Inventory</h1>
+                    <p class="subtitle">Multi-Branch System</p>
+                </div>
+            </div>
+
+            <!-- Page Navigation -->
+            <nav class="header-nav">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="transfers.html" class="active">Transfers</a>
+                <a href="purchases.html">Purchases</a>
+                <a href="management.html" class="admin-only hidden">Management</a>
+            </nav>
+
+            <!-- User Info Bar -->
+            <div id="user-info-bar" class="user-info">
+                <span class="user-greeting">Welcome, <strong id="user-display-name">User</strong></span>
+                <span id="user-role-badge" class="badge badge-role">STAFF</span>
+                <span id="user-branch-indicator" class="branch-tag">Branch: -</span>
+                <button id="logout-btn" class="btn btn-secondary btn-sm" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <div id="transfers-page" class="main-wrapper">
+        <!-- Toast / Alert Notification Container -->
+        <div id="alert-box" class="alert hidden" role="alert"></div>
+
+        <!-- 1. Create Transfer Request Form (Visible for STAFF) -->
+        <div id="transfer-create-card" class="card staff-only hidden">
+            <h3>Initiate Stock Transfer Request</h3>
+            <p class="card-desc">Request transfer of stock from your assigned branch to another destination branch.</p>
+
+            <div id="staff-unassigned-notice" class="notice-box hidden">
+                <strong>Branch Required:</strong> You do not have an assigned branch yet. Please contact an Administrator to assign your branch before creating transfers.
+            </div>
+
+            <form id="transfer-create-form" onsubmit="handleCreateTransfer(event)">
+                <div class="form-row">
+                    <div class="form-group col">
+                        <label>Source Branch (Your Branch)</label>
+                        <input type="text" id="transfer-source-display" readonly disabled value="Loading...">
+                    </div>
+                    <div class="form-group col">
+                        <label for="transfer-dest-select">Destination Branch</label>
+                        <select id="transfer-dest-select" required>
+                            <option value="">Select Destination Branch</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col">
+                        <label for="transfer-product-select">Product</label>
+                        <select id="transfer-product-select" required>
+                            <option value="">Select Product</option>
+                        </select>
+                    </div>
+                    <div class="form-group col">
+                        <label for="transfer-quantity">Transfer Quantity</label>
+                        <input type="number" id="transfer-quantity" min="1" required placeholder="e.g. 5">
+                    </div>
+                </div>
+                <button type="submit" id="btn-submit-transfer" class="btn btn-primary">Submit Transfer Request</button>
+            </form>
+        </div>
+
+        <!-- 2. Transfer Requests List & Admin Workflow Actions -->
+        <div class="card">
+            <div class="section-toolbar">
+                <div>
+                    <h2>Stock Transfer History &amp; Approvals</h2>
+                    <p class="subtitle">Transfers move through PENDING &rarr; APPROVED &rarr; COMPLETED. Approving a transfer does not deduct stock prematurely until completed.</p>
+                </div>
+                <button class="btn btn-secondary btn-sm" onclick="loadTransfers()">Refresh List</button>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Source Branch</th>
+                            <th>Destination Branch</th>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Requested By</th>
+                            <th>Status</th>
+                            <th>Created Date</th>
+                            <th class="admin-only hidden">Admin Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transfer-table-body">
+                        <tr><td colspan="9" class="text-center">Loading transfers...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
